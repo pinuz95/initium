@@ -40,7 +40,7 @@ let project = Project(
         .target(
             name: "InitiumCore",
             destinations: .macOS,
-            product: .framework,
+            product: .staticFramework,
             bundleId: "com.initium.core",
             deploymentTargets: .macOS("13.0"),
             infoPlist: .default,
@@ -59,7 +59,7 @@ let project = Project(
         .target(
             name: "InitiumBackup",
             destinations: .macOS,
-            product: .framework,
+            product: .staticFramework,
             bundleId: "com.initium.backup",
             deploymentTargets: .macOS("13.0"),
             infoPlist: .default,
@@ -80,7 +80,7 @@ let project = Project(
         .target(
             name: "InitiumTracking",
             destinations: .macOS,
-            product: .framework,
+            product: .staticFramework,
             bundleId: "com.initium.tracking",
             deploymentTargets: .macOS("13.0"),
             infoPlist: .default,
@@ -100,7 +100,7 @@ let project = Project(
         .target(
             name: "InitiumServices",
             destinations: .macOS,
-            product: .framework,
+            product: .staticFramework,
             bundleId: "com.initium.services",
             deploymentTargets: .macOS("13.0"),
             infoPlist: .default,

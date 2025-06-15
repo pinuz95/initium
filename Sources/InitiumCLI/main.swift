@@ -5,14 +5,14 @@ import os.log
 
 // MARK: - Main CLI Entry Point
 
-@available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13, watchOS 6, *)
-struct InitiumCLI: AsyncParsableCommand {
+struct InitiumCLI: ParsableCommand {
 
     static let configuration = CommandConfiguration(
         commandName: "initium",
         abstract: "Initium - Intelligent macOS Development Environment Manager",
         version: InitiumCore.version,
         subcommands: [
+            InitCommand.self,
             VersionCommand.self,
             InfoCommand.self,
             ConfigCommand.self,
@@ -20,22 +20,98 @@ struct InitiumCLI: AsyncParsableCommand {
         ],
         defaultSubcommand: StatusCommand.self
     )
+}
 
-    @Flag(name: .shortAndLong, help: "Enable verbose output")
-    var verbose = false
+// MARK: - Init Command
 
-    @Flag(name: .long, help: "Suppress non-essential output")
-    var quiet = false
-
-    func run() async throws {
-        // This should never be called since we have a default subcommand
-        throw CleanExit.helpRequest(self)
+struct InitCommand: ParsableCommand {
+    static let configuration = CommandConfiguration(
+        commandName: "init",
+        abstract: "Initialize Initium for first-time setup"
+    )
+    
+    @Flag(name: .shortAndLong, help: "Force initialization even if already configured")
+    var force = false
+    
+    func run() throws {
+        InitiumCore.initialize()
+        
+        print("🚀 Initializing Initium...")
+        print("")
+        
+        // Check if already initialized
+        let hasConfig = (try? Configuration.load()) != nil
+        if hasConfig && !force {
+            print("✅ Initium is already initialized!")
+            print("   Use --force to reinitialize or 'initium config' to modify settings.")
+            return
+        }
+        
+        // Create default configuration
+        let config = Configuration()
+        
+        print("📋 Creating default configuration...")
+        do {
+            try config.save()
+            print("✅ Configuration created at ~/.config/initium/config.json")
+        } catch {
+            print("❌ Failed to create configuration: \(error)")
+            throw error
+        }
+        
+        // Check system requirements
+        print("")
+        print("🔍 Checking system requirements...")
+        
+        let systemInfo = SystemInfo()
+        print("✅ macOS \(systemInfo.macOSVersion) detected")
+        print("✅ Architecture: \(systemInfo.architecture)")
+        print("✅ Device: \(systemInfo.deviceModel)")
+        print("✅ Memory: \(String(format: "%.1f", systemInfo.totalMemoryGB)) GB")
+        
+        // Check essential tools
+        print("")
+        print("🛠️  Checking essential development tools...")
+        
+        let essentialTools = [
+            ("Xcode Command Line Tools", "xcode-select"),
+            ("Homebrew", "brew"),
+            ("Git", "git"),
+        ]
+        
+        var allToolsInstalled = true
+        for (name, command) in essentialTools {
+            let isInstalled = SystemDetector.isToolInstalled(command)
+            let status = isInstalled ? "✅" : "❌"
+            print("   \(status) \(name)")
+            if !isInstalled {
+                allToolsInstalled = false
+            }
+        }
+        
+        print("")
+        if allToolsInstalled {
+            print("🎉 Initium is ready to use!")
+            print("")
+            print("Next steps:")
+            print("• Run 'initium info' to see detailed system information")
+            print("• Run 'initium config' to customize settings")
+            print("• Check the README for more advanced usage")
+        } else {
+            print("⚠️  Some essential tools are missing.")
+            print("")
+            print("To install missing tools:")
+            print("• Install Xcode Command Line Tools: xcode-select --install")
+            print("• Install Homebrew: /bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"")
+            print("")
+            print("After installing missing tools, run 'initium init' again.")
+        }
     }
 }
 
 // MARK: - Version Command
 
-struct VersionCommand: AsyncParsableCommand {
+struct VersionCommand: ParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "version",
         abstract: "Display version information"
@@ -44,7 +120,7 @@ struct VersionCommand: AsyncParsableCommand {
     @Flag(name: .long, help: "Show detailed version information")
     var detailed = false
 
-    func run() async throws {
+    func run() throws {
         if detailed {
             print("Initium v\(InitiumCore.version) (\(InitiumCore.build))")
             print("Built for macOS 13.0+")
@@ -61,7 +137,7 @@ struct VersionCommand: AsyncParsableCommand {
 
 // MARK: - Info Command
 
-struct InfoCommand: AsyncParsableCommand {
+struct InfoCommand: ParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "info",
         abstract: "Display system and environment information"
@@ -70,7 +146,7 @@ struct InfoCommand: AsyncParsableCommand {
     @Flag(name: .shortAndLong, help: "Show system tools and their versions")
     var tools = false
 
-    func run() async throws {
+    func run() throws {
         InitiumCore.initialize()
         Logger.cli.info("Displaying system information")
 
@@ -125,7 +201,7 @@ struct InfoCommand: AsyncParsableCommand {
 
 // MARK: - Config Command
 
-struct ConfigCommand: AsyncParsableCommand {
+struct ConfigCommand: ParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "config",
         abstract: "Manage Initium configuration",
@@ -138,13 +214,13 @@ struct ConfigCommand: AsyncParsableCommand {
     )
 }
 
-struct ConfigShow: AsyncParsableCommand {
+struct ConfigShow: ParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "show",
         abstract: "Display current configuration"
     )
 
-    func run() async throws {
+    func run() throws {
         do {
             let config = try Configuration.load()
 
@@ -166,7 +242,7 @@ struct ConfigShow: AsyncParsableCommand {
     }
 }
 
-struct ConfigSet: AsyncParsableCommand {
+struct ConfigSet: ParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "set",
         abstract: "Set configuration values"
@@ -187,7 +263,7 @@ struct ConfigSet: AsyncParsableCommand {
     @Option(help: "Set backup retention days")
     var retentionDays: Int?
 
-    func run() async throws {
+    func run() throws {
         var config = (try? Configuration.load()) ?? Configuration()
         var changed = false
 
@@ -236,7 +312,7 @@ struct ConfigSet: AsyncParsableCommand {
     }
 }
 
-struct ConfigReset: AsyncParsableCommand {
+struct ConfigReset: ParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "reset",
         abstract: "Reset configuration to defaults"
@@ -245,7 +321,7 @@ struct ConfigReset: AsyncParsableCommand {
     @Flag(help: "Skip confirmation prompt")
     var force = false
 
-    func run() async throws {
+    func run() throws {
         if !force {
             print("⚠️  This will reset all configuration to defaults.")
             print("   Use --force to skip this confirmation.")
@@ -260,13 +336,13 @@ struct ConfigReset: AsyncParsableCommand {
 
 // MARK: - Status Command
 
-struct StatusCommand: AsyncParsableCommand {
+struct StatusCommand: ParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "status",
         abstract: "Show system status overview (default command)"
     )
 
-    func run() async throws {
+    func run() throws {
         InitiumCore.initialize()
 
         print("🚀 Initium v\(InitiumCore.version)")

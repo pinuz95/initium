@@ -43,10 +43,9 @@ DerivedData/
 # Swift executables (CLI binary)
 initium
 
-# Secrets (if any proprietary components)
-pro/
-secrets/
-memory-bank/
+# Vault
+.vault
+.vaultmanifest
 
-# Claude Code brain file (contains instructions)
+# Claude
 CLAUDE.md

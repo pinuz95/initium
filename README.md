@@ -79,12 +79,37 @@ chmod +x /usr/local/bin/initium
 # Initialize Initium with your current system
 initium init
 
-# Create your first backup
-initium backup create
+# Check system status (default command)
+initium status
+initium       # Same as above
 
-# Set up a new Mac from backup
-initium backup restore <backup-id>
+# Get system information
+initium info                    # Basic system info
+initium info --tools            # Show development tools and versions
+
+# Configuration management
+initium config                  # Show current configuration
+initium config show             # Same as above
+initium config set              # Set configuration values
+initium config reset            # Reset to defaults
+
+# Version information
+initium version
+
+# Get help
+initium --help                  # Show all commands
+initium help <command>          # Get help for specific command
 ```
+
+### Available Commands
+
+| Command | Description | Options |
+|---------|-------------|---------|
+| `init` | Initialize Initium for first-time setup | |
+| `status` | Show system status overview (default) | |
+| `info` | Display system and environment information | `--tools` to show development tools |
+| `config` | Manage Initium configuration | `show`, `set`, `reset` subcommands |
+| `version` | Display version information | |
 
 ## 📋 System Requirements
 
@@ -134,21 +159,45 @@ tuist install
 tuist generate
 ```
 
-4. **Open project in Xcode**
+4. **Build and run the CLI**
 ```bash
-tuist edit
-# or
-open Initium.xcworkspace
+# Use the development runner script (recommended)
+./dev.sh build                    # Build the CLI
+./dev.sh help                     # Show dev.sh help with all commands
+./dev.sh run --help               # Show full CLI help
+
+# Run CLI commands directly
+./dev.sh init                     # Initialize Initium
+./dev.sh status                   # Check system status  
+./dev.sh info                     # Basic system info
+./dev.sh info --tools             # Show development tools
+./dev.sh config show              # Display configuration
+./dev.sh version                  # Show version
+
+# Or build manually with Tuist
+tuist build InitiumCLI
 ```
 
-5. **Build and run**
-- Select your target scheme (InitiumCLI or InitiumMenuBar)
-- Build and run (⌘+R)
+5. **Build and run the Menu Bar app**
+```bash
+# Build the MenuBar app
+tuist build InitiumMenuBar
+
+# Run the MenuBar app
+tuist run InitiumMenuBar
+```
 
 6. **Run tests**
 ```bash
 tuist test
 # or use Xcode Test Navigator (⌘+6)
+```
+
+7. **Install CLI globally (optional)**
+```bash
+# Build and copy to /usr/local/bin
+tuist build InitiumCLI
+sudo cp /Users/$USER/Library/Developer/Xcode/DerivedData/Initium-*/Build/Products/Debug/initium /usr/local/bin/
 ```
 
 ### Development Phases
