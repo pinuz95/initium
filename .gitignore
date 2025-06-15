@@ -46,5 +46,7 @@ initium
 # Secrets (if any proprietary components)
 pro/
 secrets/
-assistant.txt
 memory-bank/
+
+# Claude Code brain file (contains instructions)
+CLAUDE.md

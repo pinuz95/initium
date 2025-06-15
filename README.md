@@ -121,23 +121,34 @@ Sources/
 ```bash
 git clone https://github.com/yourusername/initium.git
 cd initium
-swift package resolve
 ```
 
-2. **Build and run CLI**
+2. **Install Tuist (if not already installed)**
 ```bash
-swift run initium-cli --help
+curl -Ls https://install.tuist.io | bash
 ```
 
-3. **Open in Xcode for menu bar app**
+3. **Generate project and install dependencies**
 ```bash
-open Package.swift
-# Select InitiumMenuBar scheme and run
+tuist install
+tuist generate
 ```
 
-4. **Run tests**
+4. **Open project in Xcode**
 ```bash
-swift test
+tuist edit
+# or
+open Initium.xcworkspace
+```
+
+5. **Build and run**
+- Select your target scheme (InitiumCLI or InitiumMenuBar)
+- Build and run (⌘+R)
+
+6. **Run tests**
+```bash
+tuist test
+# or use Xcode Test Navigator (⌘+6)
 ```
 
 ### Development Phases
