@@ -27,6 +27,22 @@ dist/
 build/
 target/
 
+# Tuist generated files
+*.xcodeproj
+*.xcworkspace
+Derived/
+.build/
+
+# Xcode
+DerivedData/
+*.xcuserdata
+*.framework
+*.profraw
+.package.resolved
+
+# Swift executables (CLI binary)
+initium
+
 # Secrets (if any proprietary components)
 pro/
 secrets/

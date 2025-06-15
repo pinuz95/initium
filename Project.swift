@@ -46,9 +46,7 @@ let project = Project(
             infoPlist: .default,
             sources: ["Sources/InitiumCore/**"],
             resources: [],
-            dependencies: [
-                .external(name: "SQLite")
-            ],
+            dependencies: [],
             settings: .settings(
                 base: [
                     "ENABLE_HARDENED_RUNTIME": "YES",
@@ -133,7 +131,7 @@ let project = Project(
                 .target(name: "InitiumBackup"),
                 .target(name: "InitiumTracking"),
                 .target(name: "InitiumServices"),
-                .external(name: "ArgumentParser"),
+                .package(product: "ArgumentParser"),
             ],
             settings: .settings(
                 base: [
@@ -176,7 +174,7 @@ let project = Project(
                 .target(name: "InitiumBackup"),
                 .target(name: "InitiumTracking"),
                 .target(name: "InitiumServices"),
-                .external(name: "ComposableArchitecture"),
+                .package(product: "ComposableArchitecture"),
                 .sdk(name: "SwiftUI", type: .framework),
                 .sdk(name: "AppKit", type: .framework),
                 .sdk(name: "UserNotifications", type: .framework),
@@ -262,7 +260,7 @@ let project = Project(
             sources: ["Tests/InitiumCLITests/**"],
             resources: [],
             dependencies: [
-                .target(name: "InitiumCLI")
+                .target(name: "InitiumCore")
             ]
         ),
 
@@ -286,7 +284,7 @@ let project = Project(
             shared: true,
             buildAction: .buildAction(targets: ["InitiumCLI"]),
             testAction: .targets(
-                ["InitiumCoreTests", "InitiumCLITests"],
+                ["InitiumCoreTests"],
                 configuration: .debug,
                 options: .options(coverage: true)
             ),
@@ -327,10 +325,10 @@ let project = Project(
             testAction: .targets(
                 [
                     "InitiumCoreTests", "InitiumBackupTests", "InitiumTrackingTests",
-                    "InitiumServicesTests", "InitiumCLITests", "InitiumMenuBarTests",
+                    "InitiumServicesTests", "InitiumMenuBarTests",
                 ],
                 configuration: .debug,
-                options: .options(coverage: true, parallelizable: true)
+                options: .options(coverage: true)
             )
         ),
     ]
