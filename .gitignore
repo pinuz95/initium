@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Build outputs
+dist/
+build/
+target/
+
+# Secrets (if any proprietary components)
+pro/
+secrets/
+assistant.txt
+memory-bank/
