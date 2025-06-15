@@ -21,7 +21,7 @@ public struct InitiumCore {
 // MARK: - System Information
 
 /// System information and detection capabilities
-public struct SystemInfo {
+public struct SystemInfo: Equatable {
 
     /// Current macOS version
     public let macOSVersion: String
