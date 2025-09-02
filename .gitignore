@@ -1,51 +1,147 @@
 # Dependencies
 node_modules/
-venv/
-__pycache__/
-*.pyc
-
-# Environment
-.env
-.env.local
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-logs/
+vendor/
+bower_components/
+jspm_packages/
 
 # Build outputs
 dist/
 build/
+out/
 target/
+*.exe
+*.dll
+*.so
+*.dylib
 
-# Tuist generated files
-*.xcodeproj
-*.xcworkspace
-Derived/
-.build/
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-workspace
 
-# Xcode
-DerivedData/
-*.xcuserdata
-*.framework
-*.profraw
-.package.resolved
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
 
-# Swift executables (CLI binary)
-initium
+# Environment and config
+.env
+.env.*
+!.env.example
+.env.local
+.env.production
+config/local.js
+*.local
 
-# Vault
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Testing
+coverage/
+.nyc_output/
+.coverage
+*.lcov
+.pytest_cache/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Package files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+.temp/
+tmp/
+temp/
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+
+# Secrets and certificates
+*.pem
+*.key
+*.crt
+*.p12
 .vault
-.vaultmanifest
+.secrets/
+secrets/
 
-# Claude
+# Tools configurations
+.cursorrules
+.cursorignore
+.clinerules
+.clineignore
+.aider*
+.continue/
+.codeium/
+.tabnine/
+.copilot*
 CLAUDE.md
+
+# Backup files
+*.bak
+*.backup
+*~
+*.orig
+
+# Cache
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+.vuepress/dist
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Xcode & iOS/macOS
+Derived/
+*.framework/
+*.xcarchive
+*.ipa
+*.dSYM.zip
+xcuserdata/
+*.xcuserstate
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.pbxuser
+.package.resolved
+Package.resolved
+default.profraw
+
+# Compiled binaries
+initium
